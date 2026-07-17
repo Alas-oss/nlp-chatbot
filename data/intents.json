@@ -1,0 +1,29 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["hi", "hello", "hey", "good morning", "good afternoon", "what's up", "howdy"],
+      "responses": ["Hello! How can I help you today?", "Hi there! What can I do for you?"]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["bye", "goodbye", "see you later", "quit", "exit", "talk to you later"],
+      "responses": ["Goodbye! Have a great day.", "See you next time!"]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["thanks", "thank you", "appreciate it", "thanks a lot", "much appreciated"],
+      "responses": ["You're welcome!", "Happy to help!", "Anytime!"]
+    },
+    {
+      "tag": "hours",
+      "patterns": ["what are your hours", "when are you open", "what time do you open", "business hours"],
+      "responses": ["We're open Monday to Friday, 9am to 5pm.", "Our hours are 9-5, Mon-Fri."]
+    },
+    {
+      "tag": "help",
+      "patterns": ["I need help", "can you help me", "I have a problem", "support"],
+      "responses": ["Of course — tell me more about what you need help with.", "I'm here to help, what's going on?"]
+    }
+  ]
+}
