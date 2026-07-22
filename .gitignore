@@ -6,3 +6,4 @@ plan.md
 vector_store.json
 data/kings_college_london.docx
 archive/intent_model.pkl
+chunks.json
