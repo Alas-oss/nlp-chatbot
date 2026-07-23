@@ -24,7 +24,7 @@ def build_vector_store(chunks):
     embeddings = _get_embeddings()
     store = InMemoryVectorStore(embedding=embeddings)
 
-    batch_size = 20  # conservative — well under the 100/minute ceiling even with retries
+    batch_size = 20  
     for i in range(0, len(chunks), batch_size):
         batch = chunks[i:i + batch_size]
         for attempt in range(4):
@@ -39,7 +39,7 @@ def build_vector_store(chunks):
                 else:
                     raise
         print(f"[ingest] embedded batch {i // batch_size + 1}/{(len(chunks) + batch_size - 1) // batch_size}")
-        time.sleep(2)  # small pause between successful batches, stay comfortably under the per-minute cap
+        time.sleep(2) 
 
     store.dump(VECTOR_STORE_PATH)
     return store
