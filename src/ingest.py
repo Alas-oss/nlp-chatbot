@@ -18,9 +18,29 @@ def _get_embeddings():
         sys.exit(1)
     return GoogleGenerativeAIEmbeddings(model="gemini-embedding-001")
 
+import time
+
 def build_vector_store(chunks):
-    store = InMemoryVectorStore(embedding=_get_embeddings())
-    store.add_documents(chunks)
+    embeddings = _get_embeddings()
+    store = InMemoryVectorStore(embedding=embeddings)
+
+    batch_size = 20  # conservative — well under the 100/minute ceiling even with retries
+    for i in range(0, len(chunks), batch_size):
+        batch = chunks[i:i + batch_size]
+        for attempt in range(4):
+            try:
+                store.add_documents(batch)
+                break
+            except Exception as e:
+                if "RESOURCE_EXHAUSTED" in str(e) or "429" in str(e):
+                    wait = 20 * (attempt + 1)
+                    print(f"[ingest] rate limited, waiting {wait}s before retrying batch {i // batch_size}...")
+                    time.sleep(wait)
+                else:
+                    raise
+        print(f"[ingest] embedded batch {i // batch_size + 1}/{(len(chunks) + batch_size - 1) // batch_size}")
+        time.sleep(2)  # small pause between successful batches, stay comfortably under the per-minute cap
+
     store.dump(VECTOR_STORE_PATH)
     return store
 

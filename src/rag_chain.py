@@ -27,7 +27,7 @@ Answer:"""
 def build_rag_chain():
     groq_key = os.getenv("GROQ_API_KEY")
     if not groq_key:
-        print("Error: QROG_API_KEY not set in .env.")
+        print("Error: GROQ_API_KEY is not set in .env.")
         sys.exit(1)
 
     retriever = build_hybrid_retriever()
@@ -35,7 +35,7 @@ def build_rag_chain():
     chain = PROMPT | model
 
     def answer(question: str) -> dict:
-        docs = retriever.invoke(question)
+        docs = retriever(question)
         context = "\n\n".join(d.page_content for d in docs)
         try:
             result = chain.invoke(
@@ -51,5 +51,5 @@ def build_rag_chain():
             return {"answer": result.content, "sources": [d.page_content[:100] for d in docs]}
         except Exception as e:
             return {"answer": f"I ran into an error while generating a response: {e}", "sources": []}
-        
+
     return answer
